@@ -60,7 +60,7 @@ namespace ConstructionLine.CodingChallenge.Tests
         {
             var smallShirt = new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red);
             var largeShirt = new Shirt(Guid.NewGuid(), "Red - Large", Size.Large, Color.Red);
-            var shirts = new List<Shirt> { smallShirt , largeShirt };
+            var shirts = new List<Shirt> { smallShirt, largeShirt };
 
             var searchEngine = new SearchEngine(shirts);
 
@@ -82,10 +82,23 @@ namespace ConstructionLine.CodingChallenge.Tests
         {
             var shirts = new List<Shirt>
             {
-                new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red),
+                new Shirt(Guid.NewGuid(), "Black - Medium", Size.Medium, Color.Black),
+                new Shirt(Guid.NewGuid(), "Black - Medium", Size.Medium, Color.Black),
                 new Shirt(Guid.NewGuid(), "Black - Medium", Size.Medium, Color.Black),
                 new Shirt(Guid.NewGuid(), "Blue - Large", Size.Large, Color.Blue),
+                new Shirt(Guid.NewGuid(), "Blue - Large", Size.Large, Color.Blue),
             };
+
+            var redShirts = new List<Shirt> {
+                new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red),
+                new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red),
+                new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red),
+                new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red),
+                new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red),
+                new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red)
+            };
+
+            shirts.AddRange(redShirts);
 
             var searchEngine = new SearchEngine(shirts);
 
@@ -99,9 +112,9 @@ namespace ConstructionLine.CodingChallenge.Tests
 
             Assert.That(results.Shirts, Is.Not.Null);
 
-            Assert.Equals(
-                results.Shirts.Where(shirt => shirts.Contains(shirt)).Count(), 
-                shirts.Count);
+            Assert.AreEqual(
+                redShirts.Count,
+                results.Shirts.Where(shirt => shirts.Contains(shirt)).Count());
         }
     }
 }
