@@ -19,16 +19,17 @@ namespace ConstructionLine.CodingChallenge
         public SearchResults Search(SearchOptions options)
         {
             var shirts = _shirts.Where(shirt =>
-                options.Colors.Contains(shirt.Color) && 
+                options.Colors.Contains(shirt.Color) &&
                 options.Sizes.Contains(shirt.Size));
 
-            var colorCounts = Color.All.Select(color => new ColorCount { Color = color, Count = shirts.Count() });
+            var colorCounts = Color.All.Select(color => new ColorCount { Color = color, Count = shirts.Count(shirt => shirt.Color == color) });
+            var sizeCounts = Size.All.Select(size => new SizeCount { Size = size, Count = shirts.Count(shirt => shirt.Size == size) });
 
             return new SearchResults
             {
                 ColorCounts = colorCounts.ToList(),
                 Shirts = shirts.ToList(),
-                SizeCounts = new List<SizeCount>()
+                SizeCounts = sizeCounts.ToList()
             };
 
             //TODO: ensure counts calculate the latest, up to date data

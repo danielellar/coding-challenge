@@ -116,7 +116,7 @@ namespace ConstructionLine.CodingChallenge.Tests
         [Test]
         public void Search_HasCorrect_SizeCount()
         {
-            var shirts = new List<Shirt>
+            var repoShirts = new List<Shirt>
             {
                 new Shirt(Guid.NewGuid(), "Red - Medium", Size.Medium, Color.Red),
                 new Shirt(Guid.NewGuid(), "Red - Medium", Size.Medium, Color.Red),
@@ -130,9 +130,9 @@ namespace ConstructionLine.CodingChallenge.Tests
                 new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red),
             };
 
-            shirts.AddRange(smallShirts);
+            repoShirts.AddRange(smallShirts);
 
-            var searchEngine = new SearchEngine(shirts);
+            var searchEngine = new SearchEngine(repoShirts);
 
             var searchOptions = new SearchOptions
             {
@@ -144,9 +144,12 @@ namespace ConstructionLine.CodingChallenge.Tests
 
             Assert.That(results.Shirts, Is.Not.Null);
 
-            Assert.AreEqual(
-                smallShirts.Count,
-                results.Shirts.Where(shirt => shirts.Contains(shirt)).Count());
+            var shirtCount = results.Shirts.Where(resultShirt => repoShirts.Contains(resultShirt)).Count();
+            Assert.AreEqual(smallShirts.Count, shirtCount);
+
+            var smallSizeCount = results.SizeCounts.Where(sc => sc.Size.Name == Size.Small.Name.ToString()).FirstOrDefault().Count;
+            Assert.That(smallSizeCount, Is.Not.Null);
+            Assert.AreEqual(smallShirts.Count, smallSizeCount);
         }
     }
 }
