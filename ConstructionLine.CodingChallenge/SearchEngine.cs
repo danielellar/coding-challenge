@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace ConstructionLine.CodingChallenge
 {
@@ -17,12 +18,12 @@ namespace ConstructionLine.CodingChallenge
 
         public SearchResults Search(SearchOptions options)
         {
-            // TODO: search logic goes here.
+            var shirts = _shirts.Where(shirt => options.Colors.Contains(shirt.Color));
 
             return new SearchResults
             {
                 ColorCounts = new List<ColorCount>(),
-                Shirts = new List<Shirt>(),
+                Shirts = shirts.ToList(),
                 SizeCounts = new List<SizeCount>()
             };
         }

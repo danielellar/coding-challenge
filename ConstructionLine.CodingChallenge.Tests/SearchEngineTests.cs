@@ -31,5 +31,29 @@ namespace ConstructionLine.CodingChallenge.Tests
             AssertSizeCounts(shirts, searchOptions, results.SizeCounts);
             AssertColorCounts(shirts, searchOptions, results.ColorCounts);
         }
+
+        [Test]
+        public void Search_HasCorrectShirt_Color()
+        {
+            var shirt = new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red);
+
+            var shirts = new List<Shirt>
+            {
+                shirt
+            };
+
+            var searchEngine = new SearchEngine(shirts);
+
+            var searchOptions = new SearchOptions
+            {
+                Colors = new List<Color> { Color.Red },
+                Sizes = new List<Size> { Size.Small }
+            };
+
+            var results = searchEngine.Search(searchOptions);
+
+            Assert.That(results.Shirts, Is.Not.Null);
+            Assert.That(results.Shirts.Contains(shirt));
+        }
     }
 }
