@@ -84,8 +84,6 @@ namespace ConstructionLine.CodingChallenge.Tests
             {
                 new Shirt(Guid.NewGuid(), "Black - Medium", Size.Medium, Color.Black),
                 new Shirt(Guid.NewGuid(), "Black - Medium", Size.Medium, Color.Black),
-                new Shirt(Guid.NewGuid(), "Black - Medium", Size.Medium, Color.Black),
-                new Shirt(Guid.NewGuid(), "Blue - Large", Size.Large, Color.Blue),
                 new Shirt(Guid.NewGuid(), "Blue - Large", Size.Large, Color.Blue),
             };
 
@@ -94,8 +92,6 @@ namespace ConstructionLine.CodingChallenge.Tests
                 new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red),
                 new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red),
                 new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red),
-                new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red),
-                new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red)
             };
 
             shirts.AddRange(redShirts);
@@ -114,6 +110,42 @@ namespace ConstructionLine.CodingChallenge.Tests
 
             Assert.AreEqual(
                 redShirts.Count,
+                results.Shirts.Where(shirt => shirts.Contains(shirt)).Count());
+        }
+
+        [Test]
+        public void Search_HasCorrect_SizeCount()
+        {
+            var shirts = new List<Shirt>
+            {
+                new Shirt(Guid.NewGuid(), "Red - Medium", Size.Medium, Color.Red),
+                new Shirt(Guid.NewGuid(), "Red - Medium", Size.Medium, Color.Red),
+                new Shirt(Guid.NewGuid(), "Red - Large", Size.Large, Color.Red),
+            };
+
+            var smallShirts = new List<Shirt> {
+                new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red),
+                new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red),
+                new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red),
+                new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red),
+            };
+
+            shirts.AddRange(smallShirts);
+
+            var searchEngine = new SearchEngine(shirts);
+
+            var searchOptions = new SearchOptions
+            {
+                Colors = new List<Color> { Color.Red },
+                Sizes = new List<Size> { Size.Small }
+            };
+
+            var results = searchEngine.Search(searchOptions);
+
+            Assert.That(results.Shirts, Is.Not.Null);
+
+            Assert.AreEqual(
+                smallShirts.Count,
                 results.Shirts.Where(shirt => shirts.Contains(shirt)).Count());
         }
     }
