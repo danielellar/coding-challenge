@@ -21,6 +21,9 @@ namespace ConstructionLine.CodingChallenge
 
             return new SearchResults
             {
+                ColorCounts = new List<ColorCount>(),
+                Shirts = new List<Shirt>(),
+                SizeCounts = new List<SizeCount>()
             };
         }
     }
