@@ -21,14 +21,16 @@ namespace ConstructionLine.CodingChallenge
             var predicate = CreatePredicate(options);
             var shirts = _shirts.Where(shirt => predicate(shirt)).ToList();
 
-            var colorCounts = Color.All.Select(color => new ColorCount 
+            var colorCounts = Color.All.Select(color => new ColorCount
             {
-                Color = color, Count = shirts.Count(shirt => shirt.Color == color) 
+                Color = color,
+                Count = shirts.Count(shirt => shirt.Color == color)
             });
 
             var sizeCounts = Size.All.Select(size => new SizeCount
             {
-                Size = size, Count = shirts.Count(shirt => shirt.Size == size)
+                Size = size,
+                Count = shirts.Count(shirt => shirt.Size == size)
             });
 
             return new SearchResults
@@ -49,9 +51,9 @@ namespace ConstructionLine.CodingChallenge
         private Func<Shirt, bool> CreatePredicate(SearchOptions options)
         {
             Func<Shirt, bool> emptyStrategy = shirt => false;
-            Func<Shirt, bool> sizesStrategy=shirt => options.Sizes.Contains(shirt.Size);
-            Func<Shirt, bool> colorsStrategy =  shirt => options.Colors.Contains(shirt.Color);
-            Func<Shirt, bool> combinedStrategy =  shirt => options.Colors.Contains(shirt.Color) && options.Sizes.Contains(shirt.Size);
+            Func<Shirt, bool> sizesStrategy = shirt => options.Sizes.Contains(shirt.Size);
+            Func<Shirt, bool> colorsStrategy = shirt => options.Colors.Contains(shirt.Color);
+            Func<Shirt, bool> combinedStrategy = shirt => options.Colors.Contains(shirt.Color) && options.Sizes.Contains(shirt.Size);
 
             if (!options.Colors.Any() && !options.Sizes.Any())
             {
@@ -65,7 +67,7 @@ namespace ConstructionLine.CodingChallenge
 
             if (options.Sizes.Any() && !options.Colors.Any())
             {
-                return sizesStrategy; 
+                return sizesStrategy;
             }
 
             if (options.Colors.Any() && !options.Sizes.Any())
