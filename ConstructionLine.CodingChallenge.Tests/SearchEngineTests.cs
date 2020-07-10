@@ -151,5 +151,112 @@ namespace ConstructionLine.CodingChallenge.Tests
             Assert.That(smallSizeCount, Is.Not.Null);
             Assert.AreEqual(smallShirts.Count, smallSizeCount);
         }
+
+        [Test]
+        public void Search_HasCorrectShirt_OnlyColorSearchOption()
+        {
+            var redShirt = new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red);
+            var blackShirt = new Shirt(Guid.NewGuid(), "Black - Small", Size.Small, Color.Black);
+            var shirts = new List<Shirt> { redShirt, blackShirt };
+
+            var searchEngine = new SearchEngine(shirts);
+
+            var searchOptions = new SearchOptions
+            {
+                Colors = new List<Color> { Color.Red },
+            };
+
+            var results = searchEngine.Search(searchOptions);
+
+            Assert.That(results.Shirts, Is.Not.Null);
+            Assert.That(results.Shirts.Contains(redShirt));
+            Assert.False(results.Shirts.Contains(blackShirt));
+        }
+
+        [Test]
+        public void Search_HasCorrectShirt_OnlySizeSearchOption()
+        {
+            var smallShirt = new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red);
+            var mediumShirt = new Shirt(Guid.NewGuid(), "Red - Medium", Size.Medium, Color.Black);
+            var shirts = new List<Shirt> { smallShirt, mediumShirt };
+
+            var searchEngine = new SearchEngine(shirts);
+
+            var searchOptions = new SearchOptions
+            {
+                Sizes = new List<Size> { Size.Small },
+            };
+
+            var results = searchEngine.Search(searchOptions);
+
+            Assert.That(results.Shirts, Is.Not.Null);
+            Assert.That(results.Shirts.Contains(smallShirt));
+            Assert.False(results.Shirts.Contains(mediumShirt));
+        }
+
+        [Test]
+        public void Search_EmptyResult_WhenNoData()
+        {
+            var shirts = new List<Shirt> { };
+
+            var searchEngine = new SearchEngine(shirts);
+
+            var searchOptions = new SearchOptions
+            {
+                Sizes = Size.All,
+                Colors = Color.All
+            };
+
+            var results = searchEngine.Search(searchOptions);
+            Assert.That(results.Shirts, Is.Not.Null);
+            Assert.That(results.Shirts.Count, Is.Zero);
+        }
+
+        [Test]
+        public void Search_Throws_ForNullSearchOptions()
+        {
+            var shirts = new List<Shirt> { new Shirt(Guid.NewGuid(), "Red - Medium", Size.Medium, Color.Red) };
+
+            var searchEngine = new SearchEngine(shirts);
+
+            Assert.Throws(typeof(ArgumentException), () => searchEngine.Search(null));
+        }
+
+        [Test]
+        public void Search_Throws_ForNullColors()
+        {
+            var shirts = new List<Shirt> { };
+
+            var searchEngine = new SearchEngine(shirts);
+
+            Assert.Throws(typeof(ArgumentException), () => searchEngine.Search(new SearchOptions { Colors = null }));
+        }
+
+        [Test]
+        public void Search_Throws_ForNullSizes()
+        {
+            var shirts = new List<Shirt> { };
+
+            var searchEngine = new SearchEngine(shirts);
+
+            Assert.Throws(typeof(ArgumentException), () => searchEngine.Search(new SearchOptions { Sizes = null }));
+        }
+
+        [Test]
+        public void Search_HasCorrectShirts_EmptySearchOptions()
+        {
+            var shirts = new List<Shirt>
+            {
+                new Shirt(Guid.NewGuid(), "Red - Large", Size.Large, Color.Red),
+                new Shirt(Guid.NewGuid(), "Red - Medium", Size.Medium, Color.Red),
+                new Shirt(Guid.NewGuid(), "Red - Small", Size.Small, Color.Red),
+            };
+
+            var searchEngine = new SearchEngine(shirts);
+            var results = searchEngine.Search(new SearchOptions());
+
+            Assert.That(results.Shirts, Is.Not.Null);
+            Assert.That(results.Shirts.Count, Is.Zero);
+        }
     }
 }
